@@ -23,3 +23,20 @@ notifications:
     recipients:
       - junwoo1027@naver.com
 
+before_deploy:
+  - zip -r boot2-webservice *
+  - mkdir -p deploy
+  - mv boot2-webservice.zip deploy/boot2-webservice.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+
+    bucket: boot2-webservice-build
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy
+    wait-until-deployed: true
+
